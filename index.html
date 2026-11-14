@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Украдене дитинство</title>
+<style>
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  color: #29475a;
+  background: #f8fcff;
+  line-height: 1.6;
+}
+header {
+  background: white;
+  padding: 15px;
+  text-align: center;
+  box-shadow: 0 2px 10px #0001;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+nav a {
+  color: #286b91;
+  text-decoration: none;
+  margin: 8px;
+  font-weight: bold;
+  cursor: pointer;
+}
+nav a.active-tab {
+  background: #dff3ff;
+  padding: 6px 14px;
+  border-radius: 20px;
+}
+.hero {
+  text-align: center;
+  padding: 65px 20px;
+  background: linear-gradient(135deg,#dff3ff,#fff4c9,#e5f5df);
+}
+h1 {
+  font-size: clamp(38px,7vw,70px);
+  color: #286b91;
+  margin: 15px;
+}
+h2 {
+  color: #286b91;
+  text-align: center;
+  font-size: 30px;
+}
+.hero p {
+  font-size: 20px;
+  max-width: 700px;
+  margin: 20px auto;
+}
+button {
+  cursor: pointer;
+  border: none;
+  border-radius: 25px;
+  padding: 13px 22px;
+  background: #286b91;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+}
+button:hover { transform: translateY(-2px); }
+section {
+  max-width: 1100px;
+  margin: 25px auto;
+  padding: 45px 20px;
+  display: none;
+}
+section.active-block {
+  display: block;
+}
+.intro {
+  text-align: center;
+  color: #587386;
+  margin-bottom: 25px;
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 18px;
+}
+.card {
+  background: white;
+  border-radius: 22px;
+  padding: 25px;
+  text-align: center;
+  box-shadow: 0 8px 22px #286b9115;
+}
+.dream {
+  border: 3px solid transparent;
+  transition: .2s;
+  color: #286b91;
+}
+.dream p {
+  color: #4a8db3;
+  font-weight: normal;
+}
+.dream:hover,.dream.active {
+  border-color: #75c6ee;
+  background: #f0faff;
+}
+.emoji { font-size: 45px; }
+.card h3 { color: #286b91; }
+#dreamMessage {
+  text-align: center;
+  color: #286b91;
+  font-weight: bold;
+  min-height: 45px;
+  margin-top: 20px;
+}
+.tree-area {
+  background: #eff9ff;
+  border-radius: 25px;
+  padding: 25px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 20px;
+}
+.words {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+.word {
+  background: white;
+  color: #286b91;
+  border: 2px solid #bce4f5;
+}
+.word.selected {
+  background: #ffe58a;
+}
+.tree {
+  min-height: 290px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.crown {
+  position: absolute;
+  width: 230px;
+  height: 190px;
+  background: #a8d995;
+  border-radius: 50%;
+  bottom: 75px;
+}
+.trunk {
+  position: absolute;
+  bottom: 5px;
+  width: 40px;
+  height: 100px;
+  background: #b98256;
+  border-radius: 10px;
+}
+.tree-words {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 7px;
+  max-width: 230px;
+  padding-bottom: 40px;
+}
+.leaf {
+  background: white;
+  color: #397b4c;
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-weight: bold;
+  animation: appear .3s;
+}
+@keyframes appear {
+  from { transform: scale(.3); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+.game-box {
+  background: white;
+  padding: 25px;
+  border-radius: 25px;
+  box-shadow: 0 8px 22px #286b9115;
+}
+.game-info {
+  text-align: center;
+  color: #286b91;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+.memory {
+  display: grid;
+  grid-template-columns: repeat(4,1fr);
+  gap: 12px;
+  max-width: 600px;
+  margin: auto;
+}
+.memory button {
+  aspect-ratio: 1.2;
+  font-size: 32px;
+  background: #dff3ff;
+  color: #286b91;
+  padding: 5px;
+}
+.memory button.open {
+  background: #fff0b8;
+}
+.memory button.matched {
+  background: #dff2d2;
+}
+#gameMessage {
+  text-align: center;
+  color: #397b4c;
+  min-height: 30px;
+}
+.letter-box {
+  background: linear-gradient(135deg,#fff8dc,#e9f7ff);
+  border-radius: 25px;
+  padding: 25px;
+  max-width: 750px;
+  margin: auto;
+}
+textarea {
+  width: 100%;
+  min-height: 130px;
+  border: 2px solid #bce4f5;
+  border-radius: 15px;
+  padding: 15px;
+  font: inherit;
+  resize: vertical;
+}
+label {
+  display: block;
+  color: #286b91;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+.letter-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 15px;
+}
+#voiceBtn {
+  background: #4aa3d5;
+}
+#voiceBtn.listening {
+  background: #e06d53;
+}
+#voiceStatus {
+  font-size: 14px;
+  color: #286b91;
+  margin-top: 8px;
+}
+.postcard {
+  display: none;
+  background: white;
+  border: 3px dashed #75c6ee;
+  border-radius: 20px;
+  padding: 25px;
+  margin-top: 25px;
+  text-align: center;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.postcard.show { display: block; }
+.quotes {
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+  gap: 18px;
+}
+.quote {
+  background: white;
+  border-radius: 20px;
+  padding: 23px;
+  box-shadow: 0 8px 20px #286b9115;
+  border-left: 6px solid #ffe58a;
+}
+footer {
+  text-align: center;
+  padding: 30px;
+  background: #e7f5fc;
+  color: #286b91;
+}
+@media(max-width:700px) {
+  .grid { grid-template-columns: repeat(2,1fr); }
+  .tree-area { grid-template-columns: 1fr; }
+  .quotes { grid-template-columns: 1fr; }
+  nav a { display: inline-block; font-size: 13px; }
+}
+@media(max-width:430px) {
+  .grid { grid-template-columns: 1fr; }
+  .memory { gap: 7px; }
+  .memory button { font-size: 25px; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div><b style="color:#286b91">☁️ Україна мріє про мир</b></div>
+  <nav>
+    <a href="#home" class="nav-link active-tab" data-target="home">Головна</a>
+    <a href="#dreams" class="nav-link" data-target="dreams">Мрії</a>
+    <a href="#tree" class="nav-link" data-target="tree">Добрі слова</a>
+    <a href="#game" class="nav-link" data-target="game">Гра</a>
+    <a href="#letter" class="nav-link" data-target="letter">Лист</a>
+    <a href="#childhood" class="nav-link" data-target="childhood">Дитинство</a>
+  </nav>
+</header>
+
+<section id="home" class="active-block" style="max-width: 100%; padding: 0; margin: 0;">
+  <div class="hero">
+    <div style="font-size:45px">🕊️ ☀️ 🌼</div>
+    <h1>Украдене дитинство</h1>
+    <p>Кожна дитина заслуговує на щасливе дитинство, мирне небо та здійснення мрій.</p>
+    <button id="openDreamsBtn">Відкрити світ дитячих мрій</button>
+    <div style="font-size:40px;margin-top:25px">💙 💛 🌈</div>
+  </div>
+</section>
+
+<section id="dreams">
+  <h2>Про що мріють діти?</h2>
+  <p class="intro">Натисни на картку та дізнайся, чому кожна дитяча мрія важлива.</p>
+
+  <div class="grid">
+    <button class="card dream" data-message="Кожна дитина має право навчатися, відкривати нове й досягати успіхів.">
+      <div class="emoji">📚</div>
+      <h3>Ходити до школи</h3>
+      <p>Дізнаватися щось цікаве щодня.</p>
+    </button>
+
+    <button class="card dream" data-message="Друзі дарують радість, підтримку та багато веселих спогадів.">
+      <div class="emoji">🧸</div>
+      <h3>Гратися з друзями</h3>
+      <p>Сміятися, грати й бути разом.</p>
+    </button>
+
+    <button class="card dream" data-message="Світ великий і дивовижний. Кожна дитина заслуговує побачити його красу.">
+      <div class="emoji">🎒</div>
+      <h3>Подорожувати</h3>
+      <p>Відкривати нові місця.</p>
+    </button>
+
+    <button class="card dream" data-message="Малювання допомагає уявляти, творити й ділитися своїми почуттями.">
+      <div class="emoji">🎨</div>
+      <h3>Малювати</h3>
+      <p>Створювати яскравий світ.</p>
+    </button>
+
+    <button class="card dream" data-message="Мирне небо — це можливість спокійно гратися, навчатися й мріяти.">
+      <div class="emoji">🕊️</div>
+      <h3>Жити в мирі</h3>
+      <p>Почуватися спокійно та безпечно.</p>
+    </button>
+
+    <button class="card dream" data-message="Любов і турбота рідних допомагають дитині відчувати себе важливою.">
+      <div class="emoji">🏡</div>
+      <h3>Бути поруч із рідними</h3>
+      <p>Обіймати близьких і бути разом.</p>
+    </button>
+  </div>
+  <p id="dreamMessage">Обери картку — і прочитай добре побажання 💛</p>
+</section>
+
+<section id="tree">
+  <h2>Дерево добрих слів</h2>
+  <p class="intro">Обери слова, які хочеш додати до нашого дерева.</p>
+
+  <div class="tree-area">
+    <div class="words">
+      <button class="word" data-word="Мир">🕊️ Мир</button>
+      <button class="word" data-word="Дружба">🤝 Дружба</button>
+      <button class="word" data-word="Любов">❤️ Любов</button>
+      <button class="word" data-word="Надія">🌟 Надія</button>
+      <button class="word" data-word="Турбота">🌷 Турбота</button>
+      <button class="word" data-word="Безпека">🏡 Безпека</button>
+      <p style="text-align:center;width:100%">Кожне добре слово стає листочком дерева!</p>
+    </div>
+
+    <div class="tree">
+      <div class="crown"></div>
+      <div class="trunk"></div>
+      <div class="tree-words" id="treeWords"></div>
+    </div>
+  </div>
+</section>
+
+<section id="game">
+  <h2>Обери символ миру</h2>
+  <p class="intro">Знайди пари однакових символів. Натискай на картки по черзі!</p>
+
+  <div class="game-box">
+    <div class="game-info">Знайдено пар: <span id="pairs">0</span> із 6</div>
+    <div class="memory" id="memory"></div>
+    <p id="gameMessage">У тебе все вийде! Знайди однакові символи 💙</p>
+    <div style="text-align:center">
+      <button id="restart">🔄 Почати знову</button>
+    </div>
+  </div>
+</section>
+
+<section id="letter">
+  <h2>Лист у мирне майбутнє</h2>
+  <p class="intro">Напиши побажання для України та інших дітей.</p>
+
+  <div class="letter-box">
+    <label for="wish">Моє побажання:</label>
+    <textarea id="wish" maxlength="350" placeholder="Я бажаю всім дітям..."></textarea>
+    <div id="voiceStatus"></div>
+
+    <div class="letter-actions">
+      <button type="button" id="voiceBtn">🎤 Надиктувати голосом</button>
+      <button id="send">💌 Надіслати побажання</button>
+    </div>
+
+    <div class="postcard" id="postcard">
+      <div style="font-size:40px">💙💛</div>
+      <h3>Листівка у мирне майбутнє</h3>
+      <p id="postcardText"></p>
+      <b>Нехай добро об'єднує нас! 🕊️</b>
+    </div>
+  </div>
+</section>
+
+<section id="childhood">
+  <h2>Дитинство має бути щасливим</h2>
+  <p class="intro">Кожна дитина заслуговує на любов, турботу, навчання, гру та можливість мріяти.</p>
+
+  <div class="quotes">
+    <div class="quote">🌈 Дитинство — це час відкриттів, радості, гри та великих мрій.</div>
+    <div class="quote">🧡 Поруч із добрими друзями навіть звичайний день стає особливим.</div>
+    <div class="quote">🏡 Родина — це місце, де дитина має відчувати любов і підтримку.</div>
+    <div class="quote">🕊️ Мир — це можливість кожній дитині зростати, навчатися й радіти життю.</div>
+    <div class="quote">🌻 Добре слово може подарувати комусь надію та гарний настрій.</div>
+    <div class="quote">⭐ Усі дитячі мрії важливі. Кожна дитина має право на щасливе майбутнє.</div>
+  </div>
+</section>
+
+<footer>
+  <b>Кожна дитина важлива. Кожне дитинство має значення.</b>
+  <p>💙 Нехай у всіх дітей буде мирне небо та можливість бути дітьми. 💛</p>
+</footer>
+
+<script>
+// Перемикання між блоками (вкладками)
+const navLinks = document.querySelectorAll('.nav-link');
+const sections = document.querySelectorAll('section');
+
+function showBlock(targetId) {
+  sections.forEach(sec => {
+    sec.classList.remove('active-block');
+  });
+  navLinks.forEach(link => {
+    link.classList.remove('active-tab');
+    if (link.dataset.target === targetId) {
+      link.classList.add('active-tab');
+    }
+  });
+  const targetSection = document.getElementById(targetId);
+  if (targetSection) {
+    targetSection.classList.add('active-block');
+  }
+}
+
+navLinks.forEach(link => {
+  link.addEventListener('click', (e) => {
+    e.preventDefault();
+    showBlock(link.dataset.target);
+  });
+});
+
+document.getElementById('openDreamsBtn').addEventListener('click', () => {
+  showBlock('dreams');
+});
+
+// Інтерактивні картки дитячих мрій
+const dreams = document.querySelectorAll('.dream');
+
+dreams.forEach(card => {
+  card.addEventListener('click', () => {
+    dreams.forEach(c => c.classList.remove('active'));
+    card.classList.add('active');
+    document.getElementById('dreamMessage').textContent =
+      card.dataset.message;
+  });
+});
+
+// Дерево добрих слів
+const treeWords = document.getElementById('treeWords');
+
+document.querySelectorAll('.word').forEach(button => {
+  button.addEventListener('click', () => {
+    if (button.disabled) return;
+
+    const leaf = document.createElement('span');
+    leaf.className = 'leaf';
+    leaf.textContent = button.dataset.word;
+
+    treeWords.appendChild(leaf);
+    button.classList.add('selected');
+    button.disabled = true;
+  });
+});
+
+// Гра на пошук пар (замінено прапор на повітряну кульку 🎈)
+const symbols = ['🕊️','☀️','❤️','🌼','🎈','🪁'];
+const memory = document.getElementById('memory');
+
+let first = null;
+let locked = false;
+let matched = 0;
+
+function shuffle(array) {
+  return array.sort(() => Math.random() - 0.5);
+}
+
+function startGame() {
+  memory.innerHTML = '';
+  first = null;
+  locked = false;
+  matched = 0;
+
+  document.getElementById('pairs').textContent = '0';
+  document.getElementById('gameMessage').textContent =
+    'У тебе все вийде! Знайди однакові символи 💙';
+
+  const cards = shuffle([...symbols, ...symbols]);
+
+  cards.forEach(symbol => {
+    const button = document.createElement('button');
+    button.textContent = '❔';
+    button.dataset.symbol = symbol;
+
+    button.addEventListener('click', () => {
+      if (locked || button.classList.contains('open') ||
+          button.classList.contains('matched')) return;
+
+      button.textContent = symbol;
+      button.classList.add('open');
+
+      if (!first) {
+        first = button;
+        return;
+      }
+
+      const second = button;
+
+      if (first.dataset.symbol === second.dataset.symbol) {
+        first.classList.remove('open');
+        second.classList.remove('open');
+        first.classList.add('matched');
+        second.classList.add('matched');
+        first.disabled = true;
+        second.disabled = true;
+
+        first = null;
+        matched++;
+
+        document.getElementById('pairs').textContent = matched;
+
+        if (matched === 6) {
+          document.getElementById('gameMessage').textContent =
+            'Чудова робота! Усі символи миру знайдено! 🎉';
+        } else {
+          document.getElementById('gameMessage').textContent =
+            'Так! Ти знайшов пару. Шукай наступну 🌟';
+        }
+      } else {
+        locked = true;
+        const previous = first;
+        first = null;
+
+        document.getElementById('gameMessage').textContent =
+          'Спробуй ще раз! Уважність допоможе.';
+
+        setTimeout(() => {
+          previous.textContent = '❔';
+          second.textContent = '❔';
+          previous.classList.remove('open');
+          second.classList.remove('open');
+          locked = false;
+        }, 850);
+      }
+    });
+
+    memory.appendChild(button);
+  });
+}
+
+document.getElementById('restart').addEventListener('click', startGame);
+startGame();
+
+// Голосовий ввід для листа
+const voiceBtn = document.getElementById('voiceBtn');
+const voiceStatus = document.getElementById('voiceStatus');
+const wishTextarea = document.getElementById('wish');
+
+const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+if (SpeechRecognition) {
+  const recognition = new SpeechRecognition();
+  recognition.lang = 'uk-UA';
+  recognition.interimResults = false;
+
+  let isListening = false;
+
+  voiceBtn.addEventListener('click', () => {
+    if (isListening) {
+      recognition.stop();
+      return;
+    }
+    recognition.start();
+  });
+
+  recognition.onstart = () => {
+    isListening = true;
+    voiceBtn.classList.add('listening');
+    voiceBtn.textContent = '⏹️ Зупинити запис';
+    voiceStatus.textContent = 'Слухаю... Говоріть своє побажання 🎙️';
+  };
+
+  recognition.onresult = (event) => {
+    const transcript = event.results[0][0].transcript;
+    const currentText = wishTextarea.value.trim();
+    wishTextarea.value = currentText ? currentText + ' ' + transcript : transcript;
+  };
+
+  recognition.onerror = () => {
+    voiceStatus.textContent = 'Не вдалося розпізнати голос. Перевірте дозл на мікрофон.';
+  };
+
+  recognition.onend = () => {
+    isListening = false;
+    voiceBtn.classList.remove('listening');
+    voiceBtn.textContent = '🎤 Надиктувати голосом';
+    if (voiceStatus.textContent.startsWith('Слухаю')) {
+      voiceStatus.textContent = 'Запис завершено ✅';
+    }
+  };
+} else {
+  voiceBtn.addEventListener('click', () => {
+    alert('Ваш браузер не підтримує голосовий ввід. Спробуйте відкрити сайт у Google Chrome.');
+  });
+}
+
+// Лист у мирне майбутнє
+document.getElementById('send').addEventListener('click', () => {
+  const text = document.getElementById('wish').value.trim();
+
+  if (!text) {
+    alert('Спочатку напиши своє побажання 💛');
+    return;
+  }
+
+  document.getElementById('postcardText').textContent = text;
+  document.getElementById('postcard').classList.add('show');
+});
+</script>
+
+</body>
+</html>
